@@ -32,10 +32,13 @@ def insert_node_at_beginning(val, head):
 # Space Complexity: O(1)
 def insert_node_at_end(val, head):
     new_node = LinkedListNode(val)
-    temp=head
-    while temp.next!=None:
-        temp=temp.next
-    temp.next=new_node
+    if head==None:
+        head=new_node
+    else:
+        temp=head
+        while temp.next!=None:
+            temp=temp.next
+        temp.next=new_node
     return head
 
 # Insert a new node after the node which has a specific value in the list (n nodes)
@@ -43,34 +46,52 @@ def insert_node_at_end(val, head):
 # Space Complexity: O(1)
 def insert_node(val, head, node_val):
     new_node = LinkedListNode(val)
-    temp=head 
-    while temp.next!=None:
-        if temp.val == node_val:
-            break
-        temp=temp.next
-    
-    new_node.next=temp.next 
-    temp.next = new_node
+    if head==None:
+        head=new_node
+    else:
+        temp=head 
+        while temp.next!=None:
+            if temp.val == node_val:
+                break
+            temp=temp.next
+        
+        new_node.next=temp.next 
+        temp.next = new_node
     return head
 
 # Delete a linked list node from the beginning of the list
 # Time Complexity: O(1)
 # Space Complexity: O(1)
 def delete_node_from_beginning(head):
-    head = head.next 
+    if head==None:
+        return head
+    elif head.next==None:
+        temp=head 
+        head=None 
+        del temp 
+    else:
+        temp=head
+        head = head.next 
+        del temp
     return head 
 
 # Delete a linked list node from the end of the list
 # Time Complexity: O(n)
 # Space Complexity: O(1)
 def delete_node_from_end(head):
-    prev = None 
-    temp=head 
-    while temp.next!=None:
-        prev=temp 
-        temp=temp.next 
-    del temp 
-    prev.next = None
+    if head==None:
+        return head
+    else:
+        prev = None 
+        temp=head 
+        while temp.next!=None:
+            prev=temp 
+            temp=temp.next 
+        del temp 
+        if prev!=None:
+            prev.next = None
+        else:
+            head=prev
     return head
 
 # Delete a linked list node with the value equals node_val
@@ -82,9 +103,15 @@ def delete_node(node_val, head):
     while(temp!=None and temp.val != node_val):
         prev=temp
         temp=temp.next 
+        
     if temp==None:
         return head
-    prev.next = temp.next 
+
+    if prev!=None:
+        prev.next = temp.next
+    else:
+        head=head.next
+
     del temp 
     return head 
 
@@ -108,6 +135,8 @@ def reverse_linked_list(head):
 # Time Complexity: O(n)
 # Space Complexity: O(1)
 def search_node(node_val, head):
+    if head==None:
+        return -1
     index=0
     temp=head 
     while(temp!=None and temp.val!=node_val):
@@ -121,6 +150,8 @@ def search_node(node_val, head):
 # Time Complexity: O(n)
 # Space Complexity: O(1)
 def update_node(node_val, new_node_val, head):
+    if head==None:
+        return 0
     temp=head 
     while(temp!=None and temp.val!=node_val):
         temp=temp.next
@@ -161,18 +192,20 @@ def get_middle_node_approach2(head):
         mid-=1
     return(temp.val)
 
+list_node_head=None
 list_node_head = LinkedListNode(5)
-
 list_node_head = insert_node_at_beginning(10, list_node_head)
 list_node_head = insert_node_at_end(3, list_node_head)
 list_node_head = insert_node_at_end(12, list_node_head)
 list_node_head = insert_node_at_end(16, list_node_head)
 list_node_head = insert_node(6, list_node_head, 5)
+
 print("List after all the insertions: ")
 print_linked_list(list_node_head)
 
+list_node_head = delete_node_from_beginning(list_node_head)
 list_node_head = delete_node_from_end(list_node_head)
-list_node_head = delete_node(3, list_node_head)
+list_node_head = delete_node(12, list_node_head)
 print("List after all the deletions: ")
 print_linked_list(list_node_head)
 
@@ -183,8 +216,8 @@ print("Node: "+str(3)+ " found at index:",search_node(3, list_node_head))
 print(update_node(3, 14, list_node_head))
 
 print("List middle node using approach 1: ")
-get_middle_node_approach1(list_node_head)
+print(get_middle_node_approach1(list_node_head))
 print("List middle node using approach 2: ")
-get_middle_node_approach2(list_node_head)
+print(get_middle_node_approach2(list_node_head))
 
 gc.collect()
